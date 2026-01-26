@@ -1,0 +1,10 @@
+metric,count,share
+total_openplay_crosses_events,35478,1.0
+time_na,874,0.024634985061164665
+stoppage_time,3107,0.08757539883871696
+grenzfaelle_boundary_case,1142,0.032188962173741474
+outside_segment_range,0,0.0
+not_assignable_despite_time,0,0.0
+ambiguous_multi_segment,0,0.0
+sonstige_probleme,0,0.0
+any_issue,5024,0.1416088843790518
