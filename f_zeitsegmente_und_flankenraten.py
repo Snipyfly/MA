@@ -503,6 +503,42 @@ def count_crosses_into_segments(df_seg: pd.DataFrame, df_cross: pd.DataFrame) ->
     return df_seg
 
 
+def extend_segments_for_stoppage(df_seg: pd.DataFrame, df_cross: pd.DataFrame) -> pd.DataFrame:
+    """
+    Erweitert das letzte Segment pro Match/Team, falls Flanken in der Nachspielzeit
+    (Minute > end_min aus 03.05) vorhanden sind.
+    """
+    df_cross2 = df_cross.dropna(subset=["match_id", "team_id", "minute"]).copy()
+    if df_cross2.empty:
+        return df_seg
+
+    max_cross = (
+        df_cross2.groupby(["match_id", "team_id"], as_index=False)["minute"]
+        .max()
+        .rename(columns={"minute": "max_cross_minute"})
+    )
+
+    df = df_seg.merge(max_cross, on=["match_id", "team_id"], how="left")
+    last_idx = (
+        df.sort_values(["match_id", "team_id", "end_min"])
+        .groupby(["match_id", "team_id"], as_index=False)
+        .tail(1)
+        .index
+    )
+
+    for idx in last_idx:
+        row = df.loc[idx]
+        max_min = row["max_cross_minute"]
+        if pd.isna(max_min):
+            continue
+        if max_min > row["end_min"]:
+            new_end = float(max_min)
+            df.at[idx, "end_min"] = new_end
+            df.at[idx, "minutes"] = float(new_end - row["start_min"] + 1)
+
+    return df.drop(columns=["max_cross_minute"])
+
+
 # ============================================================
 # Aggregation
 # ============================================================
@@ -570,14 +606,17 @@ def main():
 
     df_seg_all = pd.concat(all_seg, ignore_index=True)
 
-    # 3) Flanken in Segmente zählen
+    # 3) Segmente für Nachspielzeit erweitern (falls Flanken später liegen)
+    df_seg_all = extend_segments_for_stoppage(df_seg_all, df_cross)
+
+    # 4) Flanken in Segmente zählen
     df_seg_all = count_crosses_into_segments(df_seg_all, df_cross)
 
-    # 4) Speichern Match-Level
+    # 5) Speichern Match-Level
     df_seg_all.to_csv(OUT_MATCH_LEVEL, index=False)
     print(f"Match-Level Segmente gespeichert: {OUT_MATCH_LEVEL}")
 
-    # 5) Aggregation Season/League
+    # 6) Aggregation Season/League
     df_agg = aggregate_season_league(df_seg_all)
     df_agg.to_csv(OUT_SEASON_LEAGUE, index=False)
     print(f"Season/League Aggregation gespeichert: {OUT_SEASON_LEAGUE}")
