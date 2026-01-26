@@ -1,14 +1,14 @@
-# multi_match_flank_analysis.py
+# c_multi_match_flank_analysis.py
 
 import pandas as pd
 from datetime import datetime
 from collections import defaultdict
 
 # Importiere die Match-Liste (BL + 2. BL, letzte 5 Seasons) + Metadaten
-from season_scanner_bl_bl2 import get_match_ids_last_5_seasons
+from a_season_scanner_bl_bl2 import get_match_ids_last_5_seasons
 
 # Import aus deinem bestehenden MA-Datenimport-Modul
-from ma_datenimport import (
+from b_ma_datenimport import (
     enrich_crosses_with_state,
     link_crosses_to_shots_for_match,
 )

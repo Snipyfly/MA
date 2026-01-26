@@ -1,4 +1,4 @@
-# zeitsegmente_und_flankenraten.py
+# f_zeitsegmente_und_flankenraten.py
 # -*- coding: utf-8 -*-
 
 import os

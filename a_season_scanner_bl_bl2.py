@@ -1,4 +1,4 @@
-# season_scanner_bl_bl2.py
+# a_season_scanner_bl_bl2.py
 import requests
 import xml.etree.ElementTree as ET
 from datetime import datetime
@@ -10,7 +10,7 @@ FEED_SCHEDULE = "DFL-01.06-BaseData-Schedule"
 
 # Nur diese Wettbewerbe wollen wir (BL + 2. BL)
 WANTED_COMPS = {
-    "DFL-COM-000002": "Bundesliga",
+    "DFL-COM-000001": "Bundesliga",
 }
 
 #"DFL-COM-000001": "Bundesliga",
@@ -19,7 +19,7 @@ WANTED_COMPS = {
 # Season-ID-Kandidaten
 SEASON_PREFIX = "DFL-SEA-0001"
 CAND_RANGES = [
-    "K8",
+    "K6",
     # ggf. weitere ergänzen (J0–JZ etc.), wenn du ältere Seasons brauchst
 ]
 

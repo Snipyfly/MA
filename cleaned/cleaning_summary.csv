@@ -1,0 +1,13 @@
+file_in,rows_before,rows_after,removed,file_out
+flanke_shot_links_1_BL_DFL-SEA-0001K6.csv,2223,1368,855,flanke_shot_links_1_BL_DFL-SEA-0001K6_openplay.csv
+flanke_shot_links_1_BL_DFL-SEA-0001K7.csv,2266,1388,878,flanke_shot_links_1_BL_DFL-SEA-0001K7_openplay.csv
+flanke_shot_links_1_BL_DFL-SEA-0001K8.csv,2125,1356,769,flanke_shot_links_1_BL_DFL-SEA-0001K8_openplay.csv
+flanke_shot_links_2_BL_DFL-SEA-0001K7.csv,2202,1416,786,flanke_shot_links_2_BL_DFL-SEA-0001K7_openplay.csv
+flanke_shot_links_2_BL_DFL-SEA-0001K8.csv,2118,1349,769,flanke_shot_links_2_BL_DFL-SEA-0001K8_openplay.csv
+flanke_shot_links_2_BL__DFL-SEA-0001K6.csv,2192,1416,776,flanke_shot_links_2_BL__DFL-SEA-0001K6_openplay.csv
+flanken_1_BL_DFL-SEA-0001K6.csv,9324,5514,3810,flanken_1_BL_DFL-SEA-0001K6_openplay.csv
+flanken_1_BL_DFL-SEA-0001K7.csv,9183,5712,3471,flanken_1_BL_DFL-SEA-0001K7_openplay.csv
+flanken_1_BL_DFL-SEA-0001K8.csv,9278,5763,3515,flanken_1_BL_DFL-SEA-0001K8_openplay.csv
+flanken_2_BL_DFL-SEA-0001K6.csv,10094,6303,3791,flanken_2_BL_DFL-SEA-0001K6_openplay.csv
+flanken_2_BL_DFL-SEA-0001K7.csv,9840,6141,3699,flanken_2_BL_DFL-SEA-0001K7_openplay.csv
+flanken_2_BL_DFL-SEA-0001K8.csv,9687,6045,3642,flanken_2_BL_DFL-SEA-0001K8_openplay.csv

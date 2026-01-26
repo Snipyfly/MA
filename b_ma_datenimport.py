@@ -8,7 +8,7 @@ import requests
 import xmltodict
 import pandas as pd
 
-from season_scanner_bl_bl2 import get_match_ids_last_5_seasons
+from a_season_scanner_bl_bl2 import get_match_ids_last_5_seasons
 
 # ============================================================
 # KONFIGURATION
