@@ -25,10 +25,16 @@ def filter_open_play_crosses(df: pd.DataFrame) -> pd.DataFrame:
         if col in df.columns:
             df = df[df[col] != True]
 
+    # 3) Events ohne GameTime entfernen (Zeitangabe fehlt)
+    if "GameTime" in df.columns:
+        gametime = df["GameTime"]
+        has_time = gametime.notna() & gametime.astype(str).str.strip().ne("")
+        df = df[has_time]
+
     return df.reset_index(drop=True)
 
 
-def clean_csv_file(in_path: str, out_dir: str) -> tuple[str, int, int]:
+def clean_csv_file(in_path: str, out_dir: str) -> tuple[str, int, int, int]:
     """
     Lädt CSV, bereinigt, speichert bereinigte Version.
     Gibt (out_path, n_before, n_after) zurück.
@@ -38,13 +44,16 @@ def clean_csv_file(in_path: str, out_dir: str) -> tuple[str, int, int]:
     n_before = len(df)
     df_clean = filter_open_play_crosses(df)
     n_after = len(df_clean)
+    removed_missing_time = n_before - len(
+        df[df["GameTime"].notna() & df["GameTime"].astype(str).str.strip().ne("")]
+    ) if "GameTime" in df.columns else 0
 
     base = os.path.basename(in_path)
     name, ext = os.path.splitext(base)
     out_path = os.path.join(out_dir, f"{name}_openplay{ext}")
 
     df_clean.to_csv(out_path, index=False)
-    return out_path, n_before, n_after
+    return out_path, n_before, n_after, removed_missing_time
 
 
 def main():
@@ -81,7 +90,7 @@ def main():
 
     for f in files:
         try:
-            out_path, n_before, n_after = clean_csv_file(f, out_dir)
+            out_path, n_before, n_after, removed_missing_time = clean_csv_file(f, out_dir)
             removed = n_before - n_after
             print(f"{os.path.basename(f)} -> {os.path.basename(out_path)} | {n_before} -> {n_after} (entfernt: {removed})")
             summary_rows.append({
@@ -89,6 +98,7 @@ def main():
                 "rows_before": n_before,
                 "rows_after": n_after,
                 "removed": removed,
+                "removed_missing_gametime": removed_missing_time,
                 "file_out": os.path.basename(out_path),
             })
         except Exception as e:
