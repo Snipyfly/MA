@@ -14,9 +14,9 @@ PATTERNS = [
     "flanke_shot_links*_openplay.csv",
 ]
 
-OUTPUT_CSV = OUTPUT_DIR / "grunddaten_uebersicht.csv"
-OUTPUT_CSV_FILES = OUTPUT_DIR / "grunddaten_uebersicht_dateien.csv"
-OUTPUT_CSV_MATCHES = OUTPUT_DIR / "grunddaten_uebersicht_matches.csv"
+OUTPUT_CSV = OUTPUT_DIR / "e_grunddaten_uebersicht.csv"
+OUTPUT_CSV_FILES = OUTPUT_DIR / "e_grunddaten_uebersicht_dateien.csv"
+OUTPUT_CSV_MATCHES = OUTPUT_DIR / "e_grunddaten_uebersicht_matches.csv"
 
 
 # ============================================================

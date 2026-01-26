@@ -14,10 +14,10 @@ CROSS_PATTERNS = [
     "flanken_2_BL_*_openplay.csv",
 ]
 
-SEGMENTS_FP = CLEANED_DIR / "zeitsegmente_match_level.csv"
+SEGMENTS_FP = CLEANED_DIR / "f_zeitsegmente_match_level.csv"
 
-OUT_EVENT = CLEANED_DIR / "diagnose_eventid.csv"
-OUT_SUMMARY = CLEANED_DIR / "diagnose_summary.csv"
+OUT_EVENT = CLEANED_DIR / "i_diagnose_eventid.csv"
+OUT_SUMMARY = CLEANED_DIR / "i_diagnose_summary.csv"
 
 
 # ============================================================

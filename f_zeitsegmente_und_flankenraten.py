@@ -27,8 +27,8 @@ CROSS_FILES_PATTERN = "flanken_*_openplay.csv"  # nur OpenPlay-Flanken
 CACHE_DIR = INPUT_DIR / "_cache_basic_0305"
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
-OUT_MATCH_LEVEL = INPUT_DIR / "zeitsegmente_match_level.csv"
-OUT_SEASON_LEAGUE = INPUT_DIR / "zeitsegmente_season_league.csv"
+OUT_MATCH_LEVEL = INPUT_DIR / "f_zeitsegmente_match_level.csv"
+OUT_SEASON_LEAGUE = INPUT_DIR / "f_zeitsegmente_season_league.csv"
 
 # ============================================================
 # BASIS: HTTP + XML Helfer

@@ -20,7 +20,7 @@ for fp in flank_files:
 print("Unique Matches in OpenPlay-Flanken:", len(all_flank_mids))
 
 # 2) Match-IDs aus Segment-CSV ziehen
-seg_fp = CLEANED / "zeitsegmente_match_level.csv"
+seg_fp = CLEANED / "f_zeitsegmente_match_level.csv"
 df_seg = pd.read_csv(seg_fp)
 
 # Spalte heißt bei dir sehr wahrscheinlich match_id (oder MatchId) – robust:

@@ -4,8 +4,8 @@ import pandas as pd
 
 CLEANED_DIR = Path("cleaned")
 
-SEG_FP = CLEANED_DIR / "zeitsegmente_match_level.csv"
-OUT_FP = CLEANED_DIR / "check_flanken_vs_segmente_report.csv"
+SEG_FP = CLEANED_DIR / "f_zeitsegmente_match_level.csv"
+OUT_FP = CLEANED_DIR / "g_check_flanken_vs_segmente_report.csv"
 
 CROSS_PATTERNS = ["flanken_*_openplay.csv"]  # nur OpenPlay-Flanken-Tabellen
 

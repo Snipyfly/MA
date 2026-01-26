@@ -96,7 +96,7 @@ def main():
 
     # Summary als CSV
     summary_df = pd.DataFrame(summary_rows)
-    summary_path = os.path.join(out_dir, "cleaning_summary.csv")
+    summary_path = os.path.join(out_dir, "d_cleaning_summary.csv")
     summary_df.to_csv(summary_path, index=False)
     print("-" * 60)
     print(f"Summary gespeichert: {summary_path}")
