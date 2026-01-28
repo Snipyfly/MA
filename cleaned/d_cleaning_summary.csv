@@ -1,0 +1,13 @@
+file_in,rows_before,rows_after,removed,removed_missing_gametime,file_out
+flanke_shot_links_1_BL_DFL-SEA-0001K6.csv,2223,1368,855,0,flanke_shot_links_1_BL_DFL-SEA-0001K6_openplay.csv
+flanke_shot_links_1_BL_DFL-SEA-0001K7.csv,2266,1388,878,0,flanke_shot_links_1_BL_DFL-SEA-0001K7_openplay.csv
+flanke_shot_links_1_BL_DFL-SEA-0001K8.csv,2125,1356,769,0,flanke_shot_links_1_BL_DFL-SEA-0001K8_openplay.csv
+flanke_shot_links_2_BL_DFL-SEA-0001K7.csv,2202,1416,786,0,flanke_shot_links_2_BL_DFL-SEA-0001K7_openplay.csv
+flanke_shot_links_2_BL_DFL-SEA-0001K8.csv,2118,1349,769,0,flanke_shot_links_2_BL_DFL-SEA-0001K8_openplay.csv
+flanke_shot_links_2_BL__DFL-SEA-0001K6.csv,2192,1416,776,0,flanke_shot_links_2_BL__DFL-SEA-0001K6_openplay.csv
+flanken_1_BL_DFL-SEA-0001K6.csv,9324,5459,3865,108,flanken_1_BL_DFL-SEA-0001K6_openplay.csv
+flanken_1_BL_DFL-SEA-0001K7.csv,9183,5653,3530,119,flanken_1_BL_DFL-SEA-0001K7_openplay.csv
+flanken_1_BL_DFL-SEA-0001K8.csv,9278,5679,3599,149,flanken_1_BL_DFL-SEA-0001K8_openplay.csv
+flanken_2_BL_DFL-SEA-0001K6.csv,10094,6126,3968,347,flanken_2_BL_DFL-SEA-0001K6_openplay.csv
+flanken_2_BL_DFL-SEA-0001K7.csv,9840,5884,3956,442,flanken_2_BL_DFL-SEA-0001K7_openplay.csv
+flanken_2_BL_DFL-SEA-0001K8.csv,9687,5803,3884,437,flanken_2_BL_DFL-SEA-0001K8_openplay.csv

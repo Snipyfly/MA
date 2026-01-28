@@ -1,0 +1,13 @@
+file,table_type,league_from_filename,season_from_filename,rows,match_id_col_used,unique_matches
+flanke_shot_links_2_BL__DFL-SEA-0001K6_openplay.csv,cross_shot_links,2. Bundesliga,DFL-SEA-0001K6,1416,MatchId,284
+flanke_shot_links_1_BL_DFL-SEA-0001K6_openplay.csv,cross_shot_links,Bundesliga,DFL-SEA-0001K6,1368,MatchId,300
+flanke_shot_links_2_BL_DFL-SEA-0001K7_openplay.csv,cross_shot_links,2. Bundesliga,DFL-SEA-0001K7,1416,MatchId,300
+flanke_shot_links_1_BL_DFL-SEA-0001K7_openplay.csv,cross_shot_links,Bundesliga,DFL-SEA-0001K7,1388,MatchId,302
+flanke_shot_links_2_BL_DFL-SEA-0001K8_openplay.csv,cross_shot_links,2. Bundesliga,DFL-SEA-0001K8,1349,MatchId,299
+flanke_shot_links_1_BL_DFL-SEA-0001K8_openplay.csv,cross_shot_links,Bundesliga,DFL-SEA-0001K8,1356,MatchId,301
+flanken_2_BL_DFL-SEA-0001K6_openplay.csv,crosses,2. Bundesliga,DFL-SEA-0001K6,6126,MatchId,306
+flanken_1_BL_DFL-SEA-0001K6_openplay.csv,crosses,Bundesliga,DFL-SEA-0001K6,5459,MatchId,306
+flanken_2_BL_DFL-SEA-0001K7_openplay.csv,crosses,2. Bundesliga,DFL-SEA-0001K7,5884,MatchId,306
+flanken_1_BL_DFL-SEA-0001K7_openplay.csv,crosses,Bundesliga,DFL-SEA-0001K7,5653,MatchId,306
+flanken_2_BL_DFL-SEA-0001K8_openplay.csv,crosses,2. Bundesliga,DFL-SEA-0001K8,5803,MatchId,306
+flanken_1_BL_DFL-SEA-0001K8_openplay.csv,crosses,Bundesliga,DFL-SEA-0001K8,5679,MatchId,306
