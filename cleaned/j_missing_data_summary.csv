@@ -1,0 +1,6 @@
+metric,count,share
+total_openplay_crosses_events,34604,1.0
+time_na,0,0.0
+outside_segment_range,0,0.0
+not_assignable_despite_time,0,0.0
+ambiguous_multi_segment,0,0.0

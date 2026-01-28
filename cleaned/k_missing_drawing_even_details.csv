@@ -1,0 +1,17 @@
+match_id,home_team,away_team,match_date,goals_count,reds_count,first_goal_minute,first_red_minute,goal_in_minute_1,red_in_minute_1
+DFL-MAT-J03WII,VfL Wolfsburg,Sport-Club Freiburg,,6,0,1,,True,False
+DFL-MAT-J03WIY,1. FSV Mainz 05,VfL Bochum 1848,,7,0,1,,True,False
+DFL-MAT-J03WN8,SSV Jahn Regensburg,SV Darmstadt 98,,2,1,1,37,True,False
+DFL-MAT-J03WP3,DSC Arminia Bielefeld,Holstein Kiel,,6,0,1,,True,False
+DFL-MAT-J03WSH,Fortuna Düsseldorf,Eintracht Braunschweig,,3,0,1,,True,False
+DFL-MAT-J03WTV,FC St. Pauli,Eintracht Braunschweig,,3,0,1,,True,False
+DFL-MAT-J03YDW,1. FC Union Berlin,1. FSV Mainz 05,,5,0,1,,True,False
+DFL-MAT-J03YEQ,1. FC Köln,TSG Hoffenheim,,4,1,1,91,True,False
+DFL-MAT-J03YFT,SV Darmstadt 98,RB Leipzig,,4,0,1,,True,False
+DFL-MAT-J03YGO,Eintracht Frankfurt,VfB Stuttgart,,2,0,1,,True,False
+DFL-MAT-J03YHY,Borussia Mönchengladbach,VfB Stuttgart,,4,0,1,,True,False
+DFL-MAT-J0403U,Holstein Kiel,FC Bayern München,,6,0,1,,True,False
+DFL-MAT-J0406J,Borussia Mönchengladbach,Holstein Kiel,,5,0,1,,True,False
+DFL-MAT-J0406W,Borussia Dortmund,Bayer 04 Leverkusen,,5,0,1,,True,False
+DFL-MAT-J040CO,Hamburger SV,SSV Jahn Regensburg,,5,0,1,,True,False
+DFL-MAT-J040FN,Hamburger SV,SpVgg Greuther Fürth,,5,0,1,,True,False
