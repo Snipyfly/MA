@@ -33,6 +33,8 @@ OUT_SUMMARY = CLEANED_DIR / "i_diagnose_summary.csv"
 OUT_MISSING_SUMMARY = CLEANED_DIR / "j_missing_data_summary.csv"
 OUT_MISSING_EVENTS = CLEANED_DIR / "j_missing_data_events.csv"
 OUT_SEGMENT_CHECK = CLEANED_DIR / "g_check_flanken_vs_segmente_report.csv"
+OUT_SEGMENT_MISSING_PAIRS = CLEANED_DIR / "g_check_flanken_vs_segmente_missing_pairs.csv"
+OUT_MISSING_TEAM_PAIRS = CLEANED_DIR / "h_missing_team_pairs.csv"
 OUT_DRAWING_EVEN = CLEANED_DIR / "k_missing_drawing_even_details.csv"
 
 
@@ -417,6 +419,24 @@ def check_flanken_vs_segmente() -> None:
     print(f"In Files, aber nicht in Segmenten: {missing_in_segments}")
     print(f"In Segmenten, aber nicht in Files: {missing_in_files}")
 
+    missing_pairs = chk.loc[chk["_merge"] != "both"].copy()
+    if not missing_pairs.empty:
+        print("\nWARNUNG: Match-Team-Paare fehlen in einer Quelle (Top 20):")
+        print(
+            missing_pairs[
+                [
+                    "match_id",
+                    "team_id",
+                    "crosses_openplay_from_files",
+                    "crosses_openplay_from_segments",
+                    "diff",
+                    "_merge",
+                ]
+            ]
+            .head(20)
+            .to_string(index=False)
+        )
+
     if bad_pairs > 0:
         print("\nBeispiele (Top 20) mit Abweichung:")
         ex = chk.loc[chk["diff"] != 0].copy()
@@ -437,6 +457,10 @@ def check_flanken_vs_segmente() -> None:
     chk.to_csv(OUT_SEGMENT_CHECK, index=False)
     print(f"\nDetailreport gespeichert: {OUT_SEGMENT_CHECK}")
 
+    if not missing_pairs.empty:
+        missing_pairs.to_csv(OUT_SEGMENT_MISSING_PAIRS, index=False)
+        print(f"Fehlende Match-Team-Paare gespeichert: {OUT_SEGMENT_MISSING_PAIRS}")
+
 
 # ============================================================
 # CHECK: Missing Matches + drawing/even
@@ -448,11 +472,19 @@ def check_missing_matches() -> None:
         raise FileNotFoundError("Keine flanken_*_openplay.csv in cleaned gefunden.")
 
     all_flank_mids = set()
+    flank_pairs = set()
     for fp in flank_files:
         df = pd.read_csv(fp)
         if "MatchId" not in df.columns:
             raise ValueError(f"{fp.name}: MatchId-Spalte fehlt.")
         all_flank_mids |= set(df["MatchId"].dropna().astype(str).unique())
+        if "TeamId" in df.columns:
+            flank_pairs |= set(
+                zip(
+                    df["MatchId"].dropna().astype(str),
+                    df["TeamId"].dropna().astype(str),
+                )
+            )
 
     print("Unique Matches in OpenPlay-Flanken:", len(all_flank_mids))
 
@@ -478,6 +510,36 @@ def check_missing_matches() -> None:
 
     print("\nZusätzliche Matches (in Segmenten, aber nicht in Flanken):", len(extra))
     print("Beispiel:", extra[:20])
+
+    team_col = pick_first_existing(df_seg, ["team_id", "TeamId"])
+    if team_col is not None:
+        seg_pairs = set(
+            zip(
+                df_seg[match_col].dropna().astype(str),
+                df_seg[team_col].dropna().astype(str),
+            )
+        )
+        missing_team_pairs = sorted(flank_pairs - seg_pairs)
+        extra_team_pairs = sorted(seg_pairs - flank_pairs)
+
+        print("\nFehlende Match-Team-Paare (in Flanken, aber nicht in Segmenten):", len(missing_team_pairs))
+        print("Beispiel:", missing_team_pairs[:20])
+
+        print("\nZusätzliche Match-Team-Paare (in Segmenten, aber nicht in Flanken):", len(extra_team_pairs))
+        print("Beispiel:", extra_team_pairs[:20])
+
+        if missing_team_pairs or extra_team_pairs:
+            rows = [
+                {"match_id": mid, "team_id": tid, "status": "missing_in_segments"}
+                for mid, tid in missing_team_pairs
+            ] + [
+                {"match_id": mid, "team_id": tid, "status": "missing_in_files"}
+                for mid, tid in extra_team_pairs
+            ]
+            pd.DataFrame(rows).to_csv(OUT_MISSING_TEAM_PAIRS, index=False)
+            print(f"Detail-Export gespeichert: {OUT_MISSING_TEAM_PAIRS}")
+    else:
+        print("\nHinweis: team_id/TeamId fehlt in Segmentdatei – Team-Paar-Check übersprungen.")
 
     required_cols = {"match_state_for_team", "man_adv_state_for_team"}
     if required_cols.issubset(df_seg.columns):
@@ -581,6 +643,8 @@ def check_missing_data(ev2: pd.DataFrame) -> None:
     summary = [
         ("total_openplay_crosses_events", total),
         ("time_na", int(ev2["time_na"].sum())),
+        ("stoppage_time", int(ev2["stoppage_time"].sum())),
+        ("grenzfaelle_boundary_case", int(ev2["boundary_case"].sum())),
         ("outside_segment_range", int(ev2["outside_segment_range"].sum())),
         ("not_assignable_despite_time", int(ev2["not_assignable_despite_time"].sum())),
         ("ambiguous_multi_segment", int(ev2["ambiguous_multi_segment"].sum())),
@@ -666,6 +730,19 @@ def check_missing_drawing_even_details() -> None:
         print("Keine betroffenen Matches gefunden.")
         return
 
+    def classify_cause(first_goal: float | pd.NA, first_red: float | pd.NA, goals_count: int, reds_count: int) -> str:
+        if pd.isna(first_goal) and pd.isna(first_red):
+            if goals_count == 0 and reds_count == 0:
+                return "no_goals_or_reds"
+            return "missing_goal_red_timestamps"
+        if first_goal == 1:
+            return "goal_in_minute_1"
+        if first_red == 1:
+            return "red_in_minute_1"
+        if (not pd.isna(first_goal) and first_goal <= 5) or (not pd.isna(first_red) and first_red <= 5):
+            return "early_goal_or_red"
+        return "other"
+
     rows = []
     for mid in missing:
         try:
@@ -677,6 +754,7 @@ def check_missing_drawing_even_details() -> None:
             first_goal = goals[0]["minute"] if goals else pd.NA
             first_red = reds[0]["minute"] if reds else pd.NA
             kickoff = basic.get("@Kickoff") or basic.get("@MatchDate") or basic.get("@Date")
+            cause = classify_cause(first_goal, first_red, len(goals), len(reds))
 
             rows.append(
                 {
@@ -690,6 +768,7 @@ def check_missing_drawing_even_details() -> None:
                     "first_red_minute": first_red,
                     "goal_in_minute_1": bool(goals and goals[0]["minute"] == 1),
                     "red_in_minute_1": bool(reds and reds[0]["minute"] == 1),
+                    "likely_cause": cause,
                 }
             )
         except Exception as exc:
@@ -705,6 +784,7 @@ def check_missing_drawing_even_details() -> None:
                     "first_red_minute": pd.NA,
                     "goal_in_minute_1": pd.NA,
                     "red_in_minute_1": pd.NA,
+                    "likely_cause": "error",
                     "error": str(exc),
                 }
             )
