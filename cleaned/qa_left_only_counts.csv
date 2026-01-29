@@ -1,0 +1,7 @@
+metric,value
+openplay_matches,1836
+segment_matches,1836
+openplay_matches_with_one_team,10
+segment_matches_with_one_team,0
+segment_matches_not_in_openplay,0
+openplay_pairs_missing_in_segments,0
