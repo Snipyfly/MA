@@ -36,6 +36,8 @@ OUT_SEGMENT_CHECK = CLEANED_DIR / "g_check_flanken_vs_segmente_report.csv"
 OUT_SEGMENT_MISSING_PAIRS = CLEANED_DIR / "g_check_flanken_vs_segmente_missing_pairs.csv"
 OUT_MISSING_TEAM_PAIRS = CLEANED_DIR / "h_missing_team_pairs.csv"
 OUT_DRAWING_EVEN = CLEANED_DIR / "k_missing_drawing_even_details.csv"
+OUT_FINALWHISTLE_DETAIL = CLEANED_DIR / "l_missing_finalwhistle_by_half.csv"
+OUT_FINALWHISTLE_SUMMARY = CLEANED_DIR / "l_missing_finalwhistle_summary.csv"
 
 
 # ============================================================
@@ -54,6 +56,44 @@ def pick_first_existing(df: pd.DataFrame, candidates: list[str]) -> str | None:
         if c in df.columns:
             return c
     return None
+
+
+def iter_all_keys(obj, key_name: str):
+    stack = [obj]
+    while stack:
+        cur = stack.pop()
+        if isinstance(cur, dict):
+            for k, v in cur.items():
+                if k == key_name:
+                    yield v
+                stack.append(v)
+        elif isinstance(cur, list):
+            stack.extend(cur)
+
+
+def to_list(x):
+    if x is None:
+        return []
+    return x if isinstance(x, list) else [x]
+
+
+def classify_game_section(name: str | None) -> str | None:
+    if not name:
+        return None
+    s = str(name).strip().lower()
+    if "first" in s or "1st" in s or "1." in s or "1half" in s or "firsthalf" in s:
+        return "first_half"
+    if "second" in s or "2nd" in s or "2." in s or "2half" in s or "secondhalf" in s:
+        return "second_half"
+    return None
+
+
+def has_final_whistle(section: dict) -> bool:
+    for node in iter_all_keys(section, "FinalWhistle"):
+        for fw in to_list(node):
+            if isinstance(fw, dict):
+                return True
+    return False
 
 
 # ============================================================
@@ -796,6 +836,97 @@ def check_missing_drawing_even_details() -> None:
 
 
 # ============================================================
+# CHECK: FinalWhistle je Halbzeit vorhanden?
+# ============================================================
+
+def check_missing_finalwhistle_by_half() -> None:
+    if not SEGMENTS_FP.exists():
+        raise FileNotFoundError(f"Segment-Datei nicht gefunden: {SEGMENTS_FP}")
+
+    seg = pd.read_csv(SEGMENTS_FP)
+    match_col = pick_first_existing(seg, ["match_id", "MatchId", "matchId"])
+    if match_col is None:
+        raise ValueError(f"Keine MatchId-Spalte in {SEGMENTS_FP.name} gefunden.")
+
+    match_ids = sorted(seg[match_col].dropna().astype(str).unique())
+
+    rows = []
+    for mid in match_ids:
+        try:
+            basic = get_events_basic(mid)
+            sections = []
+            for node in iter_all_keys(basic, "GameSection"):
+                for sec in to_list(node):
+                    if isinstance(sec, dict):
+                        name = sec.get("@Name") or sec.get("@Type") or sec.get("@GameSection")
+                        sections.append((name, sec))
+
+            first_half_fw = False
+            second_half_fw = False
+            unknown_sections = 0
+            total_fw = 0
+
+            if sections:
+                for name, sec in sections:
+                    label = classify_game_section(name)
+                    if has_final_whistle(sec):
+                        total_fw += 1
+                        if label == "first_half":
+                            first_half_fw = True
+                        elif label == "second_half":
+                            second_half_fw = True
+                        else:
+                            unknown_sections += 1
+            else:
+                for node in iter_all_keys(basic, "FinalWhistle"):
+                    for fw in to_list(node):
+                        if isinstance(fw, dict):
+                            total_fw += 1
+                unknown_sections = total_fw
+
+            rows.append(
+                {
+                    "match_id": mid,
+                    "finalwhistle_first_half": first_half_fw,
+                    "finalwhistle_second_half": second_half_fw,
+                    "finalwhistle_unknown_section": unknown_sections,
+                    "finalwhistle_total": total_fw,
+                    "missing_first_half": not first_half_fw,
+                    "missing_second_half": not second_half_fw,
+                    "missing_any_half": (not first_half_fw) or (not second_half_fw),
+                }
+            )
+        except Exception as exc:
+            rows.append(
+                {
+                    "match_id": mid,
+                    "finalwhistle_first_half": pd.NA,
+                    "finalwhistle_second_half": pd.NA,
+                    "finalwhistle_unknown_section": pd.NA,
+                    "finalwhistle_total": pd.NA,
+                    "missing_first_half": pd.NA,
+                    "missing_second_half": pd.NA,
+                    "missing_any_half": pd.NA,
+                    "error": str(exc),
+                }
+            )
+
+    df = pd.DataFrame(rows)
+    df.to_csv(OUT_FINALWHISTLE_DETAIL, index=False)
+    print(f"Detail-Export gespeichert: {OUT_FINALWHISTLE_DETAIL}")
+
+    summary = {
+        "matches_total": len(df),
+        "missing_first_half": int(df["missing_first_half"].fillna(False).sum()),
+        "missing_second_half": int(df["missing_second_half"].fillna(False).sum()),
+        "missing_any_half": int(df["missing_any_half"].fillna(False).sum()),
+        "unknown_section_finalwhistles": int(df["finalwhistle_unknown_section"].fillna(0).sum()),
+    }
+    pd.DataFrame([summary]).to_csv(OUT_FINALWHISTLE_SUMMARY, index=False)
+    print(f"Summary gespeichert: {OUT_FINALWHISTLE_SUMMARY}")
+
+
+# ============================================================
 # RUNNER
 # ============================================================
 
@@ -825,6 +956,7 @@ def main() -> None:
         lambda: check_missing_data(ev2_holder.get("df", diagnose_event_assignment())),
     )
     run_step("k_check_missing_drawing_even_details", check_missing_drawing_even_details)
+    run_step("l_check_missing_finalwhistle_by_half", check_missing_finalwhistle_by_half)
 
 
 if __name__ == "__main__":
