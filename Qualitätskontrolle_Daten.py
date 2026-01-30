@@ -39,7 +39,6 @@ OUT_MISSING_TEAM_PAIRS = CLEANED_DIR / "h_missing_team_pairs.csv"
 OUT_DRAWING_EVEN = CLEANED_DIR / "k_missing_drawing_even_details.csv"
 OUT_FINALWHISTLE_DETAIL = CLEANED_DIR / "l_missing_finalwhistle_by_half.csv"
 OUT_FINALWHISTLE_SUMMARY = CLEANED_DIR / "l_missing_finalwhistle_summary.csv"
-OUT_HALF_DURATIONS = CLEANED_DIR / "m_half_durations_from_openplay.csv"
 
 
 # ============================================================
@@ -929,61 +928,6 @@ def check_missing_finalwhistle_by_half() -> None:
 
 
 # ============================================================
-# CHECK: Dauer 1./2. Halbzeit aus OpenPlay-Matches
-# ============================================================
-
-def check_half_durations_from_openplay() -> None:
-    cross_files = sorted(CLEANED_DIR.glob("flanken_*_openplay.csv"))
-    if not cross_files:
-        raise FileNotFoundError("Keine flanken_*_openplay.csv in cleaned gefunden.")
-
-    match_ids = set()
-    for fp in cross_files:
-        df = safe_read_csv(fp)
-        match_col = pick_first_existing(df, ["MatchId", "SourceMatchId", "match_id"])
-        if match_col is None:
-            raise ValueError(f"{fp.name}: MatchId-Spalte fehlt.")
-        match_ids |= set(df[match_col].dropna().astype(str).unique())
-
-    rows = []
-    for mid in sorted(match_ids):
-        try:
-            basic = get_events_basic(mid)
-            end_by_half = extract_match_end_minutes_by_half(basic)
-            first_end = end_by_half.get("first_half")
-            second_end = end_by_half.get("second_half")
-            first_duration = first_end
-            second_duration = None
-            if first_end is not None and second_end is not None:
-                second_duration = max(second_end - first_end, 0)
-
-            rows.append(
-                {
-                    "match_id": mid,
-                    "end_min_first_half": first_end,
-                    "end_min_second_half": second_end,
-                    "duration_first_half": first_duration,
-                    "duration_second_half": second_duration,
-                }
-            )
-        except Exception as exc:
-            rows.append(
-                {
-                    "match_id": mid,
-                    "end_min_first_half": pd.NA,
-                    "end_min_second_half": pd.NA,
-                    "duration_first_half": pd.NA,
-                    "duration_second_half": pd.NA,
-                    "error": str(exc),
-                }
-            )
-
-    df = pd.DataFrame(rows)
-    df.to_csv(OUT_HALF_DURATIONS, index=False)
-    print(f"Detail-Export gespeichert: {OUT_HALF_DURATIONS}")
-
-
-# ============================================================
 # RUNNER
 # ============================================================
 
@@ -1014,7 +958,6 @@ def main() -> None:
     )
     run_step("k_check_missing_drawing_even_details", check_missing_drawing_even_details)
     run_step("l_check_missing_finalwhistle_by_half", check_missing_finalwhistle_by_half)
-    run_step("m_check_half_durations_from_openplay", check_half_durations_from_openplay)
 
 
 if __name__ == "__main__":
