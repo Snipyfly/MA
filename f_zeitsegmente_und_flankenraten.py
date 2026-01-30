@@ -223,6 +223,42 @@ def extract_match_end_minute(basic: dict) -> int:
     return max(mins)
 
 
+def classify_game_section(name: str | None) -> str | None:
+    if not name:
+        return None
+    s = str(name).strip().lower()
+    if "first" in s or "1st" in s or "1." in s or "1half" in s or "firsthalf" in s:
+        return "first_half"
+    if "second" in s or "2nd" in s or "2." in s or "2half" in s or "secondhalf" in s:
+        return "second_half"
+    return None
+
+
+def extract_match_end_minutes_by_half(basic: dict) -> dict:
+    """
+    Liefert End-Minuten pro Halbzeit (FinalWhistle).
+    Rückgabe: {"first_half": int|None, "second_half": int|None}
+    """
+    end_by_half = {"first_half": None, "second_half": None}
+
+    for node in iter_all_keys(basic, "GameSection"):
+        for sec in to_list(node):
+            if not isinstance(sec, dict):
+                continue
+            name = sec.get("@Name") or sec.get("@Type") or sec.get("@GameSection")
+            half = classify_game_section(name)
+            if half is None:
+                continue
+            for fw in to_list(sec.get("FinalWhistle")):
+                if not isinstance(fw, dict):
+                    continue
+                mop = parse_minute_of_play(fw.get("@MinuteOfPlay"))
+                if mop is not None:
+                    end_by_half[half] = max(end_by_half[half] or 0, mop)
+
+    return end_by_half
+
+
 def build_state_timelines(basic: dict) -> tuple[dict, dict]:
     """
     Liefert pro Minute m (1..end_min) den Score-State und Man-Adv-State
@@ -364,6 +400,7 @@ def build_segments_for_match(match_id: str) -> pd.DataFrame:
     league_name = meta["competition"]
 
     end_min = extract_match_end_minute(basic)
+    end_by_half = extract_match_end_minutes_by_half(basic)
     score_state, man_state = build_state_timelines(basic)
 
     home_id = meta["home_id"]
@@ -375,6 +412,8 @@ def build_segments_for_match(match_id: str) -> pd.DataFrame:
                                     score_state, man_state, end_min)
 
     df = pd.DataFrame(seg_home + seg_guest)
+    df["end_min_first_half"] = end_by_half.get("first_half")
+    df["end_min_second_half"] = end_by_half.get("second_half")
     return df
 
 
