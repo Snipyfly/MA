@@ -13,7 +13,6 @@ from f_zeitsegmente_und_flankenraten import (
     extract_red_events,
     extract_teams_meta,
     get_events_basic,
-    extract_match_end_minutes_by_half,
 )
 
 # ============================================================
