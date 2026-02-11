@@ -1,0 +1,2 @@
+model,n_obs,share_positive,log_likelihood,mcfadden_r2,accuracy_threshold_0_5,pattern_baseline
+A_logit_shot_within_8s,34604,0.20015027164489654,-16328.236863807513,0.05743158360140932,0.7998497283551035,P1

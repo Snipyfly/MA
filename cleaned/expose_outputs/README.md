@@ -1,0 +1,25 @@
+# Expose Output Files
+
+01_gap_matrix.csv
+02_variablenkatalog.csv
+03_cross_event_base.csv
+03b_pattern_selection_metrics.csv
+03e_pattern_cluster_profiles.csv
+03f_pattern_namensvorschlaege.csv
+03g_pattern_unterschiede_summary.csv
+03h_pattern_k_entscheidung.csv
+04_validierung_summary.csv
+04_validierung_links_stats.csv
+05_deskriptiv_muster_gesamt.csv
+05_deskriptiv_muster_liga_saison.csv
+05_deskriptiv_muster_formation.csv
+05_pattern_effektivitaet_bedingungen.csv
+05_pattern_nutzung_nach_state.csv
+05_deskriptiv_state.csv
+05_h1_state_crosses_per90.csv
+05_h1_state_crosses_per90_by_formation.csv
+06_model_a_logit_coefficients.csv
+06_model_a_logit_metrics.csv
+06_model_b_ols_coefficients.csv
+06_model_b_ols_metrics.csv
+07_expose_textbausteine.md

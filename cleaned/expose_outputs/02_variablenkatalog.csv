@@ -1,0 +1,17 @@
+Variable,Rolle,Quelle,Transformation,Regel
+EventId,ID,n_flanken_mit_formation_0201.csv,string,Event-Key
+MatchId,Cluster,n_flanken_mit_formation_0201.csv,string,Pflicht
+TeamId,Cluster,n_flanken_mit_formation_0201.csv,string,Pflicht
+Season,Kontrolle,n_flanken_mit_formation_0201.csv,kategorial,Pflicht
+Competition,Kontrolle,n_flanken_mit_formation_0201.csv,kategorial,Pflicht
+"X,Y,X_rec,Y_rec,MaxHeight",Musterentdeckung,n_flanken_mit_formation_0201.csv,numeric,in Clusterfeatures
+"NumAttInBox,NumDefInBox",Muster/Bedingung,n_flanken_mit_formation_0201.csv,numeric,in Clusterfeatures + Modelle
+box_balance,Bedingung,abgeleitet,NumAttInBox-NumDefInBox,Modellpradiktor
+box_crowded,Bedingung,abgeleitet,NumDefInBox >= P75,Interaktion
+MatchStateForTeam,Bedingung,n_flanken_mit_formation_0201.csv,winning/drawing/losing,Interaktion
+LineUp,Moderator-Basis,n_flanken_mit_formation_0201.csv,string,Pflicht
+formation_group,Aux,abgeleitet,3er/4er/5er,klassische Ableitung
+formation_macro,Moderator,abgeleitet,wingback/back4,Interaktion
+pattern_cluster,UV-Kern,datengetrieben,k-means Cluster,zentrale Musterkategorie
+shot_within_8s,AV1,Join auf flanke_shot_links,0/1,primaerer Endpunkt
+ShotxG,AV2,Join auf flanke_shot_links,numeric,nur bei shot_within_8s=1

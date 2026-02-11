@@ -1,0 +1,19 @@
+Check,Wert,Details
+join_integritaet_eventid,0.20015,6926/34604 events with shot<=8s
+formationsmapping_3_4_5,1.0,valid_3_4_5=34604
+formationsmapping_wingback_back4,1.0,valid_macro=34604
+qa_share_without_lineup_pct,0.0,from o_qa_flanken_ohne_formation_summary.csv
+outcome_konsistenz_shot_within_8s,0.20015,target ~0.20
+sensitivitaet_6s,0.186944,same event-link basis
+sensitivitaet_8s,0.20015,primary endpoint
+sensitivitaet_10s,0.20015,same event-link basis
+pattern_discovery_k_selected,5.0,chosen by majority vote of elbow/silhouette/gap with constraints
+pattern_discovery_k_elbow,7.0,line-distance elbow on inertia_eval
+pattern_discovery_k_silhouette,5.0,max silhouette on constrained candidates
+pattern_discovery_k_gap,9.0,Tibshirani gap rule on constrained candidates
+pattern_discovery_votes,,"5:1,6:0,7:1,8:0,9:1"
+pattern_discovery_stability_ari,0.707018,mean pairwise ARI across seeds
+pattern_discovery_silhouette,0.168738,sample silhouette mean
+pattern_discovery_gap,1.576835,gap statistic
+pattern_discovery_gap_std,0.004835,gap standard error term
+pattern_discovery_min_cluster_share,0.143654,small-cluster guard

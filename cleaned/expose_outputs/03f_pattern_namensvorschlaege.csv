@@ -1,0 +1,6 @@
+pattern_cluster,pattern_name,suggested_name,start_zone,width_zone,trajectory,height_level,side_mode
+P1,high_start|halfspace|to_high|level|low|same_side,Grundlinie-Halbraum-Neutral-Typ,grundlinie,halbraum,neutral,flach,gleichseite
+P2,deep_start|wing|to_deep|forward|medium|same_side,Fruehe Fluegelhereingabe,frueh,breit,vorwaerts,mittel,gleichseite
+P3,mid_start|wing|to_deep|level|low|same_side,Rueckraumorientierte Flanke,zwischenraum,breit,rueckraum,flach,gleichseite
+P4,deep_start|central|to_high|forward|high|switch,Hohe Seitenwechsel-Flanke,frueh,zentral,vorwaerts,hoch,seitenwechsel
+P5,high_start|central|to_mid|level|high|switch,Hoher Grundlinien-Rueckraumball,grundlinie,zentral,rueckraum,hoch,seitenwechsel

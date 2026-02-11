@@ -1,0 +1,2 @@
+k_candidates_min,k_candidates_max,min_k_for_expose,min_cluster_share_threshold,candidate_k_values,elbow_k_unconstrained,silhouette_k_unconstrained,gap_k_unconstrained,elbow_k_constrained,silhouette_k_constrained,gap_k_constrained,votes_by_k,k_selected
+3,10,5,0.03,"5,6,7,8,9",6,3,10,7,5,9,"5:1,6:0,7:1,8:0,9:1",5

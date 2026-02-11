@@ -1,0 +1,2 @@
+model,n_obs,mean_shotxg,r2,pattern_baseline
+B_ols_shotxg_given_shot,6909,0.11722333188594586,0.02160084631146697,P1

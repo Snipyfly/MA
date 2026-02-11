@@ -1,0 +1,7 @@
+GapID,LiteraturLuecke,TestbarkeitMitDatensatz,VerfuegbareVariablen,Hinweis
+G1,Flankenmuster werden oft vordefiniert statt datengetrieben ermittelt.,voll,"X, Y, X_rec, Y_rec, MaxHeight, NumAttInBox, NumDefInBox",Explorative Clusteranalyse auf Event-Level-Flankenmerkmalen.
+G2,Muster-Effektivitaet wird selten simultan auf Abschlusswahrscheinlichkeit und xG geprueft.,voll,"shot_within_8s, ShotxG",Zwei Endpunkte (binar + kontinuierlich).
+G3,"Bedingte Effektivitaet (Spielzustand, Strafraumdichte) ist unzureichend modelliert.",voll,"MatchStateForTeam, NumDefInBox, box_crowded",Interaktionen Muster x Bedingungen.
+G4,Formationseinfluss auf Muster-Effekt wird selten als Moderator modelliert.,voll,LineUp -> formation_macro (wingback vs back4),Interaktionen Muster x Formation.
+G5,Stichproben oft klein/turnierzentriert statt Ligabetrieb.,voll,"34.604 Flanken, 1.836 Matches, 2 Ligen, 3 Saisons",Breiter Ligadaten-Scope.
+G6,Dynamische Ingame-Formationswechsel.,teilweise,statische Match-Formation,Keine zeitaufgeloesten Formation-Switch-Events.
